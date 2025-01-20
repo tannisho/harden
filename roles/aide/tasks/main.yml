@@ -1,0 +1,17 @@
+---
+- name: copy_aide_conf
+  ansible.builtin.copy:
+    src: "{{ aide_conf_file }}"
+    dest: /etc/aide.conf
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: copy_aide_cronjob
+  ansible.builtin.copy:
+    src: "{{ aide_cronjob }}"
+    dest: /etc/cron.daily/aide
+    owner: root
+    group: root
+    mode: '0600'
+  notify: aide_init

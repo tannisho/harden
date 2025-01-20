@@ -1,0 +1,22 @@
+- name: harden_node
+  hosts: harden_hosts
+  vars_files:
+    - ~/repos/misc/harden_role/vars/external_vars.yml
+  roles:  
+    - users
+    - pkgs
+    - fstab
+    - dconf
+    - aide
+    - auditd
+    - ssh
+
+  handlers:
+    - name: restart_sshd
+      ansible.builtin.service:
+        name: sshd
+        state: restarted
+    - name: restart_dconf
+      ansible.builtin.command: dconf update
+    - name: aide_init
+      ansible.builtin.command: /usr/sbin/aide --init

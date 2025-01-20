@@ -1,0 +1,17 @@
+---
+- name: copy_dconf_local_d_settings
+  ansible.builtin.copy:
+    src: "{{ dconf_local_d_settings }}"
+    dest: /etc/dconf/db/local.d/00-security-settings
+    owner: root
+    group: root
+    mode: '0640'
+
+- name: copy_dconf_gdm_d_settings
+  ansible.builtin.copy:
+    src: "{{ dconf_gdm_d_settings }}"
+    dest: /etc/dconf/db/gdm.d/00-security-settings
+    owner: root
+    group: root
+    mode: '0640'
+  notify: restart_dconf  

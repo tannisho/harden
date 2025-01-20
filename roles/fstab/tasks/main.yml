@@ -1,0 +1,60 @@
+- name: get_boot_uuid
+  ansible.builtin.shell: cat /etc/fstab|grep boot|cut -d ' ' -f1
+  register: boot_uuid
+
+- name: /boot
+  ansible.posix.mount:
+    path: /boot
+    src: "{{ boot_uuid.stdout }}"
+    fstype: xfs
+    opts: defaults,nodev,nosuid
+    state: mounted
+- name: /home
+  ansible.posix.mount:
+    path: /home
+    src: /dev/mapper/vg0-home
+    fstype: xfs
+    opts: defaults,nodev,nosuid
+    state: mounted
+- name: /var
+  ansible.posix.mount:
+    path: /var
+    src: /dev/mapper/vg0-var
+    fstype: xfs
+    opts: rw,seclabel,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota,nodev
+    state: mounted
+- name: /var/log
+  ansible.posix.mount:
+    path: /var/log
+    src: /dev/mapper/vg0-log
+    fstype: xfs
+    opts: rw,seclabel,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota,nodev,noexec,nosuid
+    state: mounted
+- name: /var/log/audit
+  ansible.posix.mount:
+    path: /var/log/audit
+    src: /dev/mapper/vg0-audit
+    fstype: xfs
+    opts: rw,seclabel,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota,nodev,noexec,nosuid
+    state: mounted
+- name: /var/tmp
+  ansible.posix.mount:
+    path: /var/tmp
+    src: /dev/mapper/vg0-vartmp
+    fstype: xfs
+    opts: rw,seclabel,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota,nodev,noexec,nosuid
+    state: mounted
+- name: /tmp
+  ansible.posix.mount:
+    path: /tmp
+    src: /dev/mapper/vg0-tmp
+    fstype: xfs
+    opts: rw,seclabel,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota,nodev,noexec,nosuid
+    state: mounted
+- name: tmpfs
+  ansible.posix.mount:
+    path: /dev/shm
+    src: tmpfs
+    fstype: tmpfs
+    opts: rw,nosuid,nodev,noexec,seclabel,inode64
+    state: mounted

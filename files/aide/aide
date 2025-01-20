@@ -1,0 +1,2 @@
+#Ansible: run AIDE check
+5 4 * * 0 /usr/sbin/aide  --check | /bin/mail -s "$(hostname) - AIDE Integrity Check" root@localhost

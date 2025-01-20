@@ -1,0 +1,18 @@
+- name: create_groups
+  with_items: "{{ users | ansible.builtin.dict2items }}"
+  ansible.builtin.group:
+    gid: "{{ item['value']['uid'] }}"
+    name: "{{ item['value']['name'] }}"
+    state: present
+- name: create_users
+  with_items: "{{ users | ansible.builtin.dict2items }}"
+  ansible.builtin.user:
+    name: "{{ item['value']['name'] }}"
+    group: "{{ item['value']['name'] }}"
+    groups: 'wheel'
+    uid: "{{ item['value']['uid'] }}"
+    comment: "{{ item['value']['full_name'] | default(item['value']['name']) | capitalize }}" 
+    shell: "{{ item['value']['shell'] | default('/bin/bash') }}"
+    password: "{{ item['value']['password'] }}"
+    home: "{{ item['value']['home'] }}"
+    state: present

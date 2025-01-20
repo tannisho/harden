@@ -1,0 +1,32 @@
+---
+aide_conf_file: ~/repos/misc/harden_role/files/aide/aide.conf
+aide_cronjob: ~/repos/misc/harden_role/files/aide/aide
+audit_rules_file: ~/repos/misc/harden_role/files/audit/audit.rules
+auditd_conf_file: ~/repos/misc/harden_role/files/audit/auditd.conf
+etc_issue_file: ~/repos/misc/harden_role/files/ssh/issue
+sshd_compliance_updates_conf_file: ~/repos/misc/harden_role/files/ssh/00-compliance-updates.conf
+dconf_local_d_settings: ~/repos/misc/harden_role/files/dconf/local.d/00-security-settings
+dconf_gdm_d_settings: ~/repos/misc/harden_role/files/dconf/gdm.d/00-security-settings
+
+users:
+  locala:
+    name: locala
+    uid: 99500
+    full_name: 'Local Admin User'
+    shell: /bin/bash
+    password: $6$5w5VsQXeYKvys$mSXH.yNSBNfADytXat38WUFm2k1jmOZpF36ufnNAvXKSAK5sKu4l74dda0rV4EmwAEkYf3rUDZA6/Dn63zZro/ 
+    home: /var/local/locala
+  foobar:
+    name: foobar
+    uid: 99501
+    full_name: 'Foo Bar'
+    shell: /bin/bash
+    password: $6$zfbPDu5euUyd$C/bQcQhomwaoJ.XyDgyET8PuyoYmalY0LsThg.Sp6FXxPo98fZSKq0odUXqo6ilQdEDVZ1lYQAPaSdyjrasrV/
+    home: /var/local/foobar
+
+packages:
+  - aide
+  - audispd-plugins
+  - krb5-workstation
+  - rng-tools
+  - usbguard
