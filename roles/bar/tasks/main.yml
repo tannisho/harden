@@ -1,0 +1,4 @@
+- name: copy_rp
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/barfile"
+    dest: /tmp/barfile

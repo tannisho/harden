@@ -1,7 +1,7 @@
 ---
 - name: copy_audit_dot_rules
   ansible.builtin.copy:
-    src: "{{ audit_rules_file }}"
+    src: "{{ role_path }}/files/audit.rules"
     dest: /etc/audit/rules.d/audit.rules
     owner: root
     group: root
@@ -9,7 +9,7 @@
 
 - name: copy_auditd_conf
   ansible.builtin.copy:
-    src: "{{ auditd_conf_file }}"
+    src: "{{ role_path }}/files/auditd.conf"
     dest: /etc/audit/auditd.conf
     owner: root
     group: root

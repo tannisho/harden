@@ -10,6 +10,7 @@
     - aide
     - auditd
     - ssh
+    - grub
 
   handlers:
     - name: restart_sshd
@@ -20,3 +21,5 @@
       ansible.builtin.command: dconf update
     - name: aide_init
       ansible.builtin.command: /usr/sbin/aide --init
+    - name: update_grub
+      ansible.builtin.command: grub2-mkconfig -o /boot/grub2/grub.cfg

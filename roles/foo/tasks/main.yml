@@ -1,7 +1,4 @@
-- name: get_boot_uuid
-  ansible.builtin.shell: cat /etc/fstab|grep boot|cut -d ' ' -f1
-  register: boot_uuid
-
-- name: uuid_out
-  ansible.builtin.debug:    
-    msg: "{{ boot_uuid.stdout }}"
+- name: copy_rp
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/foofile"
+    dest: /tmp/foofile

@@ -1,13 +1,4 @@
 ---
-aide_conf_file: ~/repos/misc/harden_role/files/aide/aide.conf
-aide_cronjob: ~/repos/misc/harden_role/files/aide/aide
-audit_rules_file: ~/repos/misc/harden_role/files/audit/audit.rules
-auditd_conf_file: ~/repos/misc/harden_role/files/audit/auditd.conf
-etc_issue_file: ~/repos/misc/harden_role/files/ssh/issue
-sshd_compliance_updates_conf_file: ~/repos/misc/harden_role/files/ssh/00-compliance-updates.conf
-dconf_local_d_settings: ~/repos/misc/harden_role/files/dconf/local.d/00-security-settings
-dconf_gdm_d_settings: ~/repos/misc/harden_role/files/dconf/gdm.d/00-security-settings
-
 users:
   locala:
     name: locala
@@ -30,3 +21,6 @@ packages:
   - krb5-workstation
   - rng-tools
   - usbguard
+
+grub_user: 'grubuser'
+grub_password: 'grub.pbkdf2.sha512.10000.D6DA772016F920D00909D3993F27E8BF0D23DC54DFE88356AED42C8AB354D311173065FEE81F1CFCB0D0F57454EC092F3527347D76E2CF4C6478F80EA09DF98E.8546952EDCE3E8F465A6D02EF8AC5C105EC6264F29C4910E44BCC418EE663488E848CFEC0B68588AF68502C090CC0E21FC069A2ABCE184CB6812F149CE79D6D9'

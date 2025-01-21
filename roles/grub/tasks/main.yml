@@ -1,0 +1,12 @@
+- name: update_grub_custom_superuser
+  ansible.builtin.lineinfile:
+    path: /etc/grub.d/40_custom
+    regex: '^set superusers='
+    line: set superusers='grubuser'
+
+- name: update_grub_custom_password
+  ansible.builtin.lineinfile:
+    path: /etc/grub.d/40_custom
+    regex: '^password_pbkdf2'
+    line: "password_pbkdf2 {{ grub_user }} {{ grub_password }}" 
+  notify: update_grub

@@ -1,7 +1,7 @@
 ---
 - name: copy_aide_conf
   ansible.builtin.copy:
-    src: "{{ aide_conf_file }}"
+    src: "{{ role_path }}/files/aide.conf"
     dest: /etc/aide.conf
     owner: root
     group: root
@@ -9,7 +9,7 @@
 
 - name: copy_aide_cronjob
   ansible.builtin.copy:
-    src: "{{ aide_cronjob }}"
+    src: "{{ role_path }}/files/aide"
     dest: /etc/cron.daily/aide
     owner: root
     group: root
