@@ -1,0 +1,8 @@
+- name: check_fips
+  ansible.builtin.command: fips-mode-setup --check
+  register: is_fips_enabled
+
+- name: enable_fips
+  ansible.builtin.command: fips-mode-setup --enable
+  when:
+  - is_fips_enabled.stdout.find('FIPS mode is enabled.') == -1

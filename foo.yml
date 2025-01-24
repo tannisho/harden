@@ -1,9 +1,9 @@
 - name: foo
   hosts: harden_hosts
   vars_files:
-    - ~/repos/misc/harden_role/vars/external_vars.yml
+    - ~/harden/vars/external_vars.yml
   roles:  
-    - grub
+    - foo
 
   handlers:
     - name: restart_sshd

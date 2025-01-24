@@ -1,4 +1,5 @@
-- name: copy_rp
+- name: copy_file
   ansible.builtin.copy:
-    src: "{{ role_path }}/files/foofile"
-    dest: /tmp/foofile
+    src: "{{ role_path }}/files/foofile8"
+    dest: /tmp/foofile8
+  when: ansible_facts.distribution_major_version == "8"

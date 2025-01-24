@@ -1,5 +1,5 @@
 - name: get_boot_uuid
-  ansible.builtin.shell: cat /etc/fstab|grep boot|cut -d ' ' -f1
+  ansible.builtin.shell: cat /etc/fstab|grep -e boot[[:space:]]|cut -d ' ' -f1
   register: boot_uuid
 
 - name: /boot
@@ -51,10 +51,11 @@
     fstype: xfs
     opts: rw,seclabel,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota,nodev,noexec,nosuid
     state: mounted
-- name: tmpfs
-  ansible.posix.mount:
-    path: /dev/shm
-    src: tmpfs
-    fstype: tmpfs
-    opts: rw,nosuid,nodev,noexec,seclabel,inode64
-    state: mounted
+# rhel 9
+#- name: tmpfs
+#  ansible.posix.mount:
+#    path: /dev/shm
+#    src: tmpfs
+#    fstype: tmpfs
+#    opts: rw,nosuid,nodev,noexec,seclabel,inode64
+#    state: mounted

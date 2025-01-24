@@ -22,4 +22,15 @@
     owner: root
     group: root
     mode: '0640'
+  when: ansible_facts.distribution_major_version == "9"
+  notify: restart_sshd
+
+- name: add_ssh_conf
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/sshd_config"
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: '0600'
+  when: ansible_facts.distribution_major_version == "8"
   notify: restart_sshd
