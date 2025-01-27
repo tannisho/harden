@@ -1,5 +1,14 @@
-- name: copy_file
-  ansible.builtin.copy:
-    src: "{{ role_path }}/files/foofile8"
-    dest: /tmp/foofile8
+- name: set_fact_8
+  ansible.builtin.set_fact:
+    foov: 8
   when: ansible_facts.distribution_major_version == "8"
+
+- name: set_fact_9
+  ansible.builtin.set_fact:
+    foov: 9
+  when: ansible_facts.distribution_major_version == "9"
+
+- name: copy_file
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/foofile.j2"
+    dest: /tmp/foofile8
