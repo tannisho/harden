@@ -6,3 +6,31 @@
   ansible.builtin.command: fips-mode-setup --enable
   when:
   - is_fips_enabled.stdout.find('FIPS mode is enabled.') == -1
+
+- name: copy_sshserver_crypto_policy
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/opensshserver.txt"
+    dest: /usr/share/crypto-policies/FIPS/opensshserver.txt
+    owner: root
+    group: root
+    mode: '0644'
+  when: ansible_facts.distribution_major_version == "8"
+
+- name: copy_ssh_crypto_policy
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/openssh.txt"
+    dest: /usr/share/crypto-policies/FIPS/openssh.txt
+    owner: root
+    group: root
+    mode: '0644'
+  when: ansible_facts.distribution_major_version == "8"
+
+# TODO: grab updated gnutls.txt from hardened rhel 8 system
+#- name: copy_gnutls_crypto_policy
+#  ansible.builtin.copy:
+#    src: "{{ role_path }}/files/gnutls.txt"
+#    dest: /usr/share/crypto-policies/FIPS/gnutls.txt
+#    owner: root
+#    group: root
+#    mode: '0644'
+#  when: ansible_facts.distribution_major_version == "8"

@@ -52,10 +52,11 @@
     opts: rw,seclabel,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota,nodev,noexec,nosuid
     state: mounted
 # rhel 9
-#- name: tmpfs
-#  ansible.posix.mount:
-#    path: /dev/shm
-#    src: tmpfs
-#    fstype: tmpfs
-#    opts: rw,nosuid,nodev,noexec,seclabel,inode64
-#    state: mounted
+- name: tmpfs
+  ansible.posix.mount:
+    path: /dev/shm
+    src: tmpfs
+    fstype: tmpfs
+    opts: rw,nosuid,nodev,noexec,seclabel,inode64
+    state: mounted
+  when: ansible_facts.distribution_major_version == "9"

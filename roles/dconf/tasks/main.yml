@@ -7,10 +7,10 @@
     group: root
     mode: '0640'
 
-- name: copy_dconf_gdm_d_settings
+- name: copy_dconf_distro_d_settings
   ansible.builtin.copy:
-    src: "{{ role_path }}/files/gdm.d/00-security-settings"
-    dest: /etc/dconf/db/gdm.d/00-security-settings
+    src: "{{ role_path }}/files/distro.d/00-security-settings"
+    dest: /etc/dconf/db/distro.d/00-security-settings
     owner: root
     group: root
     mode: '0640'
