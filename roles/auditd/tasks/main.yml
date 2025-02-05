@@ -15,6 +15,7 @@
     group: root
     mode: '0640'
 
+## requires audispd-plugins, should be install in pkgs role
 - name: update_audit_plugin_syslog_conf
   ansible.builtin.lineinfile:
     path: /etc/audit/plugins.d/syslog.conf

@@ -15,6 +15,15 @@
     state: link
     force: true
 
+- name: remove_dup_options
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/50-redhat.conf
+    dest: /etc/ssh/sshd_config.d/50-redhat.conf
+    owner: root
+    group: root
+    mode: '0600'
+  when: ansible_facts.distribution_major_version == "9"
+
 - name: add_compliance_updates_conf
   ansible.builtin.copy:
     src: "{{ role_path }}/files/00-compliance-updates.conf"
@@ -25,7 +34,7 @@
   when: ansible_facts.distribution_major_version == "9"
   notify: restart_sshd
 
-- name: add_ssh_conf
+- name: add_sshd_conf
   ansible.builtin.copy:
     src: "{{ role_path }}/files/sshd_config"
     dest: /etc/ssh/sshd_config
