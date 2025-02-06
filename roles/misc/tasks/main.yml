@@ -1,0 +1,109 @@
+#- name: mask_debug_shell
+#  ansible.builtin.systemd_service:
+#    name: debug-shell.service
+#    enabled: false
+#    masked: yes
+
+## placeholder: enable authselect?
+
+- name: add_hard_maxlogins
+  ansible.builtin.copy:
+    dest: /etc/security/limits.d/maxlogins
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      * hard maxlogins 10
+
+- name: add_tmout
+  ansible.builtin.copy:
+    path: /etc/profile.d/tmout.sh
+    owner: root
+    group: root
+    mode: '0644'
+    block: |
+      typeset -xr TMOUT=600
+
+- name: update_pwquality_conf
+  ansible.builtin.blockinfile:
+    path: /etc/security/pwquality.conf
+    block: |
+      difok = 8
+      minlen = 15
+      dcredit = -1
+      ucredit = -1
+      lcredit = -1
+      ocredit = -1
+      minclass = 4
+      maxrepeat = 3
+      maxclassrepeat = 4
+      dictcheck = 1
+      enforce_for_root
+      retry = 3
+
+- name: update_faillock_conf
+  ansible.builtin.blockinfile:
+    path: /etc/security/faillock.conf
+    block: |
+      deny = 3
+      even_deny_root
+      dir = /var/log/faillock
+      fail_interval = 900
+      unlock_time = 0
+
+- name: add_ctrl_alt_delete_action
+  ansible.builtin.blockinfile:
+    path: /etc/systemd/system.conf
+    block: |
+      CtrlAltDelBurstAction=none
+
+- name: symlink_ctrl_alt_delete
+  ansible.builtin.file:
+    src: /etc/systemd/system/ctrl-alt-del.target
+    dest: /dev/null
+    owner: root
+    group: root
+    state: link
+    force: true
+
+- name: update_useradd
+  ansible.builtin.replace:
+    path: /etc/default/useradd
+    regexp: 'INACTIVE=-1'
+    replace: 'INACTIVE=35'
+
+- name: update_pass_min
+  ansible.builtin.replace:
+    path: /etc/login.defs
+    regexp: 'PASS_MIN_DAYS   0'
+    replace: 'PASS_MIN_DAYS 1'
+
+- name: update_pass_max
+  ansible.builtin.replace:
+    path: /etc/login.defs
+    regexp: 'PASS_MAX_DAYS   99999'
+    replace: 'PASS_MAX_DAYS 60'
+
+- name: update_fail_delay
+  ansible.builtin.replace:
+    path: /etc/login.defs
+    regexp: '#FAIL_DELAY             3'
+    replace: 'FAIL_DELAY 4'
+
+- name: update_login_defs_umask
+  ansible.builtin.replace:
+    path: /etc/login.defs
+    regexp: 'UMASK           022'
+    replace: 'UMASK 077'
+
+- name: update_bashrc_umask
+  ansible.builtin.replace:
+    path: /etc/bashrc
+    regexp: '022'
+    replace: '077'
+
+- name: update_cshrc_umask
+  ansible.builtin.replace:
+    path: /etc/csh.cshrc
+    regexp: '022'
+    replace: '077'

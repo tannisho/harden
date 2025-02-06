@@ -1,0 +1,8 @@
+- name: update_sudoers
+  ansible.builtin.blockinfile:
+    path: /etc/sudoers
+    block: |
+      Defaults timestamp_timeout=5
+      Defaults !targetpw
+      Defaults !rootpw
+      Defaults !runaspw

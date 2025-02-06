@@ -17,7 +17,7 @@
 
 - name: remove_dup_options
   ansible.builtin.copy:
-    src: "{{ role_path }}/files/50-redhat.conf
+    src: "{{ role_path }}/files/50-redhat.conf"
     dest: /etc/ssh/sshd_config.d/50-redhat.conf
     owner: root
     group: root

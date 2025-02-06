@@ -9,4 +9,28 @@
     path: /etc/grub.d/40_custom
     regex: '^password_pbkdf2'
     line: "password_pbkdf2 {{ grub_user }} {{ grub_password }}" 
+
+- name: update_superuser_in_users
+  ansible.builtin.replace:
+    path: /etc/grub.d/01_users
+    regexp: 'root'
+    replace: "{{ grub_user }}"
+
+- name: check_kernel_params
+  ansible.builtin.lineinfile:
+    backup: true
+    path: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX=".*pti=on vsyscall=none kernel.randomize_va_space=2 page_poison=1 slub_debug=P audit=1 audit_backlog_limit=8192'
+    state: absent
+  check_mode: true
+  register: grub_cmdline_check
+  changed_when: false
+
+- name: add_kernel_params
+  ansible.builtin.lineinfile:
+    backrefs: true
+    path: /etc/default/grub
+    regexp: "^(GRUB_CMDLINE_LINUX=\".*)\"$"
+    line: '\1 pti=on vsyscall=none kernel.randomize_va_space=2 page_poison=1 slub_debug=P audit=1 audit_backlog_limit=8192"'
+  when: grub_cmdline_check.found == 0
   notify: update_grub

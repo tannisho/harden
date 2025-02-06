@@ -14,4 +14,37 @@
     owner: root
     group: root
     mode: '0640'
+
+- name: update_gdm_custom_conf
+  ansible.builtin.lineinfile:
+    path: /etc/gdm/custom.conf
+    regex: '^#WaylandEnable=false'
+    line: "AutomaticLoginEnable=false"
+
+- name: create_dconf_distro_d_lock
+  ansible.builtin.copy:
+    dest: /etc/dconf/db/distro.d/locks/lock-settings
+    owner: root
+    group: root
+    mode: '0640'
+    content: |
+      /org/gnome/login-screen/banner-message-enable
+      /org/gnome/login-screen/disable-restart-buttons
+      /org/gnome/login-screen/disable-user-list
+
+- name: create_dconf_local_d_lock
+  ansible.builtin.copy:
+    dest: /etc/dconf/db/local.d/locks/lock-settings
+    owner: root
+    group: root
+    mode: '0640'
+    content: |
+      /org/gnome/settings-daemon/peripherals/smartcard/removal-action
+      /org/gnome/desktop/media-handling/automount-open
+      /org/gnome/desktop/media-handling/autorun-never
+      /org/gnome/desktop/session/idle-delay
+      /org/gnome/desktop/screensaver/lock-delay
+      /org/gnome/desktop/screensaver/lock-enabled
+      /org/gnome/desktop/screensaver/picture-uri
+      /org/gnome/settings-daemon/plugins/media-keys/logout
   notify: restart_dconf  

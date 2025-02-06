@@ -5,12 +5,14 @@
   roles:  
     - users
     - pkgs
+    - fips
     - fstab
     - dconf
     - aide
     - auditd
     - ssh
     - grub
+    - misc
 
   handlers:
     - name: restart_sshd

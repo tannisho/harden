@@ -3,3 +3,9 @@
     name: "{{ item }}"
     state: present 
   with_items: "{{ packages }}"
+
+- name: remove_packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: absent
+  with_items: "{{ packages_to_remove }}"
