@@ -1,5 +1,6 @@
 - name: check_authselect
   ansible.builtin.command: authselect check
+  check_mode: true
   register: is_authselect_enabled
 
 - name: enable_authselect
