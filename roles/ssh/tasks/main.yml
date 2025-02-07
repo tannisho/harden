@@ -38,7 +38,7 @@
 
 - name: add_compliance_updates_conf
   ansible.builtin.copy:
-    src: "{{ role_path }}/files/00-compliance-updates.conf"
+    src: "{{ role_path }}/files/9/00-compliance-updates.conf"
     dest: /etc/ssh/sshd_config.d/00-compliance-updates.conf
     owner: root
     group: root
@@ -48,10 +48,28 @@
 
 - name: add_sshd_conf
   ansible.builtin.copy:
-    src: "{{ role_path }}/files/sshd_config"
+    src: "{{ role_path }}/files/8/sshd_config"
     dest: /etc/ssh/sshd_config
     owner: root
     group: root
     mode: '0600'
   when: ansible_facts.distribution_major_version == "8"
   notify: restart_sshd
+
+- name: add_fips_crypto-policies_opensshserver.txt
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/8/opensshserver.txt"
+    dest: /usr/share/crypto-policies/FIPS/opensshserver.txt
+    owner: root
+    group: root
+    mode: '0644'
+  when: ansible_facts.distribution_major_version == "8"
+
+- name: add_fips_crypto-policies_openssh.txt
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/8/openssh.txt"
+    dest: /usr/share/crypto-policies/FIPS/openssh.txt
+    owner: root
+    group: root
+    mode: '0644'
+  when: ansible_facts.distribution_major_version == "8"
