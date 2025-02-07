@@ -1,10 +1,8 @@
-#- name: mask_debug_shell
-#  ansible.builtin.systemd_service:
-#    name: debug-shell.service
-#    enabled: false
-#    masked: yes
-
-## placeholder: enable authselect?
+- name: mask_debug_shell
+  ansible.builtin.systemd_service:
+    name: debug-shell.service
+    enabled: false
+    masked: true
 
 - name: add_hard_maxlogins
   ansible.builtin.copy:

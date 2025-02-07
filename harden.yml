@@ -5,6 +5,7 @@
   roles:  
     - users
     - pkgs
+    - authselect
     - fips
     - fstab
     - dconf

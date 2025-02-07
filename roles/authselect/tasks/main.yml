@@ -1,0 +1,8 @@
+- name: check_authselect
+  ansible.builtin.command: authselect check
+  register: is_authselect_enabled
+
+- name: enable_authselect
+  ansible.builtin.command: authselect select sssd --force
+  when:
+  - is_authselect_enabled.stdout.find('Current configuration is valid.') == -1
