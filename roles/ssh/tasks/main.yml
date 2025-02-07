@@ -24,6 +24,18 @@
     mode: '0600'
   when: ansible_facts.distribution_major_version == "9"
 
+- name: update_ssh_crypto_policy
+  ansible.builtin.lineinfile:
+    path: /usr/share/crypto-policies/FIPS/openssh.txt
+    regex: '^Ciphers aes256-gcm@openssh.com,aes256-ctr,aes128-gcm@openssh.com,aes128-ctr'
+    line: 'Ciphers aes256-gcm@openssh.com,chacha20-poly1305@openssh.com,aes256-ctr,aes128-gcm@openssh.com,aes128-ctr'
+
+- name: update_sshserver_crypto_policy
+  ansible.builtin.lineinfile:
+    path: /usr/share/crypto-policies/FIPS/opensshserver.txt
+    regex: '^Ciphers aes256-gcm@openssh.com,aes256-ctr,aes128-gcm@openssh.com,aes128-ctr'
+    line: '^Ciphers aes256-gcm@openssh.com,chacha20-poly1305@openssh.com,aes256-ctr,aes128-g cm@openssh.com,aes128-ctr'
+
 - name: add_compliance_updates_conf
   ansible.builtin.copy:
     src: "{{ role_path }}/files/00-compliance-updates.conf"

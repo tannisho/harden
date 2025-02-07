@@ -11,6 +11,7 @@
     - aide
     - auditd
     - ssh
+    - sudo
     - grub
     - misc
 

@@ -17,11 +17,11 @@
 
 - name: add_tmout
   ansible.builtin.copy:
-    path: /etc/profile.d/tmout.sh
+    dest: /etc/profile.d/tmout.sh
     owner: root
     group: root
     mode: '0644'
-    block: |
+    content: |
       typeset -xr TMOUT=600
 
 - name: update_pwquality_conf
@@ -59,8 +59,8 @@
 
 - name: symlink_ctrl_alt_delete
   ansible.builtin.file:
-    src: /etc/systemd/system/ctrl-alt-del.target
-    dest: /dev/null
+    src: /dev/null
+    dest: /etc/systemd/system/ctrl-alt-del.target
     owner: root
     group: root
     state: link
