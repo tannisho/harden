@@ -1,0 +1,29 @@
+- name: chmod_cron_d
+  ansible.builtin.file:
+    path: /etc/cron.d
+    mode: '0700'
+
+- name: chmod_cron_daily
+  ansible.builtin.file:
+    path: /etc/cron.daily
+    mode: '0700'
+
+- name: chmod_cron_hourly
+  ansible.builtin.file:
+    path: /etc/cron.hourly
+    mode: '0700'
+
+- name: chmod_cron_monthly
+  ansible.builtin.file:
+    path: /etc/cron.monthly
+    mode: '0700'
+
+- name: chmod_cron_weekly
+  ansible.builtin.file:
+    path: /etc/cron.weekly
+    mode: '0700'
+
+- name: chmod_crontab
+  ansible.builtin.file:
+    path: /etc/crontab
+    mode: '0600'

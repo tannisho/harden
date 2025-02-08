@@ -1,0 +1,8 @@
+- name: add_sysctl_options
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/50-disa-options.conf"
+    dest: /etc/sysctl.d/50-disa-options.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: ansible_facts.distribution_major_version == "9"

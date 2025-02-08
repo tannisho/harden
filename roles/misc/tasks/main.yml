@@ -4,23 +4,37 @@
     enabled: false
     masked: true
 
-- name: add_hard_maxlogins
+- name: mask_kdump
+  ansible.builtin.systemd_service:
+    name: kdump.service
+    enabled: false
+    masked: true
+
+- name: mask_coredump
+  ansible.builtin.systemd_service:
+    name: systemd-coredump.socket
+    enabled: false
+    masked: true
+
+- name: add_limits
   ansible.builtin.copy:
-    dest: /etc/security/limits.d/maxlogins
+    dest: /etc/security/limits.d/other_limits.conf
     owner: root
     group: root
     mode: '0644'
     content: |
       * hard maxlogins 10
+      * hard core 0
 
-- name: add_tmout
+- name: add_disa_options
   ansible.builtin.copy:
-    dest: /etc/profile.d/tmout.sh
+    dest: /etc/profile.d/disa_options.sh
     owner: root
     group: root
     mode: '0644'
     content: |
       typeset -xr TMOUT=600
+      umask 077
 
 - name: update_pwquality_conf
   ansible.builtin.blockinfile:
@@ -70,29 +84,35 @@
     regexp: 'INACTIVE=-1'
     replace: 'INACTIVE=35'
 
-- name: update_pass_min
+- name: update_coredump
   ansible.builtin.replace:
+    path: /etc/systemd/coredump.conf
+    regexp: '#Storage=external'
+    replace: 'Storage=none'
+
+- name: update_pass_min
+  ansible.builtin.lineinfile:
     path: /etc/login.defs
-    regexp: 'PASS_MIN_DAYS   0'
-    replace: 'PASS_MIN_DAYS 1'
+    regex: '^PASS_MIN_DAYS\s+'
+    line: 'PASS_MIN_DAYS 1'
 
 - name: update_pass_max
-  ansible.builtin.replace:
+  ansible.builtin.lineinfile:
     path: /etc/login.defs
-    regexp: 'PASS_MAX_DAYS   99999'
-    replace: 'PASS_MAX_DAYS 60'
+    regex: '^PASS_MAX_DAYS\s+'
+    line: 'PASS_MAX_DAYS 60'
 
 - name: update_fail_delay
-  ansible.builtin.replace:
+  ansible.builtin.lineinfile:
     path: /etc/login.defs
-    regexp: '#FAIL_DELAY             3'
-    replace: 'FAIL_DELAY 4'
+    regex: '^#FAIL_DELAY\s+'
+    line: 'FAIL_DELAY 4'
 
 - name: update_login_defs_umask
-  ansible.builtin.replace:
+  ansible.builtin.lineinfile:
     path: /etc/login.defs
-    regexp: 'UMASK           022'
-    replace: 'UMASK 077'
+    regex: '^UMASK\s+'
+    line: 'UMASK 077'
 
 - name: update_bashrc_umask
   ansible.builtin.replace:
@@ -105,3 +125,5 @@
     path: /etc/csh.cshrc
     regexp: '022'
     replace: '077'
+
+# remove rescue from /usr/lib/systemd/system/rescue.service
