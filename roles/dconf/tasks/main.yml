@@ -15,11 +15,18 @@
     group: root
     mode: '0640'
 
-- name: update_gdm_custom_conf
+- name: update_gdm_custom_conf_autologin
   ansible.builtin.lineinfile:
     path: /etc/gdm/custom.conf
     regex: '^#WaylandEnable=false'
     line: "AutomaticLoginEnable=false"
+
+- name: update_gdm_custom_conf_disable_xdmcp
+  ansible.builtin.lineinfile:
+    path: /etc/gdm/custom.conf
+    regex: '^Enable=false'
+    insertafter: '^\[xdmcp\]\n'
+    line: Enable=false
 
 - name: create_dconf_distro_d_lock
   ansible.builtin.copy:
@@ -29,6 +36,7 @@
     mode: '0640'
     content: |
       /org/gnome/login-screen/banner-message-enable
+      /org/gnome/login-screen/banner-message-text
       /org/gnome/login-screen/disable-restart-buttons
       /org/gnome/login-screen/disable-user-list
 
@@ -40,6 +48,7 @@
     mode: '0640'
     content: |
       /org/gnome/settings-daemon/peripherals/smartcard/removal-action
+      /org/gnome/desktop/media-handling/automount
       /org/gnome/desktop/media-handling/automount-open
       /org/gnome/desktop/media-handling/autorun-never
       /org/gnome/desktop/session/idle-delay

@@ -3,7 +3,37 @@
   check_mode: true
   register: is_authselect_enabled
 
+- name: check_authselect_with_pwhistory
+  ansible.builtin.command: authselect current | grep pwhistory
+  check_mode: true
+  register: is_authselect_with_pwhistory
+
+- name: check_authselect_with_faillock
+  ansible.builtin.command: authselect current | grep faillock
+  check_mode: true
+  register: is_authselect_with_faillock
+
+- name: check_authselect_without_nullok
+  ansible.builtin.command: authselect current | grep nullok
+  check_mode: true
+  register: is_authselect_without_nullok
+
 - name: enable_authselect
   ansible.builtin.command: authselect select sssd --force
   when:
   - is_authselect_enabled.stdout.find('Current configuration is valid.') == -1
+
+- name: enable_authselect_with_pwhistory
+  ansible.builtin.command: authselect enable-feature with-pwhistory
+  when:
+  - is_authselect_with_pwhistory.stdout.find('- with-pwhistory') == -1
+
+- name: enable_authselect_with_faillock
+  ansible.builtin.command: authselect enable-feature with-faillock
+  when:
+  - is_authselect_with_faillock.stdout.find('- with-faillock') == -1
+
+- name: enable_authselect_without_nullok
+  ansible.builtin.command: authselect enable-feature without-nullok
+  when:
+  - is_authselect_without_nullok.stdout.find('- without-nullok') == -1

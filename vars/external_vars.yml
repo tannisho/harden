@@ -24,9 +24,11 @@ packages:
   - nss-tools
   - rng-tools
   - s-nail
+  - systemd-journal-remote
   - usbguard
 
 packages_to_remove:
+  - dnsmasq
   - iprutils
   - tuned
 

@@ -2,7 +2,9 @@
   ansible.builtin.blockinfile:
     path: /etc/sudoers
     block: |
+      Defaults logfile=/var/log/sudo.log
       Defaults timestamp_timeout=5
       Defaults !targetpw
       Defaults !rootpw
       Defaults !runaspw
+      Defaults use_pty
