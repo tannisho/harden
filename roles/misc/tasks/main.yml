@@ -1,3 +1,19 @@
+- name: check_no_sha1
+  ansible.builtin.command: update-crypto-policies --show
+  register: is_no_sha1_enabled
+
+- name: enable_no_sha1
+  ansible.builtin.command: update-crypto-policies --set DEFAULT:NO-SHA1
+  when:
+  - is_no_sha1_enabled.stdout.find('DEFAULT:NO-SHA1') == -1
+
+- name: add_journald_options
+  ansible.builtin.blockinfile:
+    path: /etc/systemd/journald.conf
+    block: |
+      Compress=yes
+      Storage=persistent
+
 - name: remove_at_deny
   ansible.builtin.file:
     path: /etc/at.deny
@@ -16,9 +32,15 @@
     group: root
     mode: '0600'
 
-- name: mask_avahi_daemon
+- name: mask_avahi_daemon_service
   ansible.builtin.systemd_service:
     name: avahi-daemon.service
+    enabled: false
+    masked: true
+
+- name: mask_avahi_daemon_socket
+  ansible.builtin.systemd_service:
+    name: avahi-daemon.socket
     enabled: false
     masked: true
 
@@ -46,6 +68,18 @@
     enabled: false
     masked: true
 
+- name: mask_systemd_journal_remote
+  ansible.builtin.systemd_service:
+    name: systemd-journal-remote.socket
+    enabled: false
+    masked: true
+
+- name: mask_nftables
+  ansible.builtin.systemd_service:
+    name: nftables.service
+    enabled: false
+    masked: true
+
 - name: add_limits
   ansible.builtin.copy:
     dest: /etc/security/limits.d/other_limits.conf
@@ -66,51 +100,11 @@
       typeset -xr TMOUT=600
       umask 077
 
-- name: update_pwquality_conf
-  ansible.builtin.blockinfile:
-    path: /etc/security/pwquality.conf
-    block: |
-      difok = 8
-      minlen = 15
-      dcredit = -1
-      ucredit = -1
-      lcredit = -1
-      ocredit = -1
-      minclass = 4
-      maxrepeat = 3
-      maxclassrepeat = 4
-      dictcheck = 1
-      enforce_for_root
-      retry = 3
-
-- name: update_pwhistory_conf
-  ansible.builtin.blockinfile:
-    path: /etc/security/pwhistory.conf
-    block: |
-      remember = 24
-
-- name: update_faillock_conf
-  ansible.builtin.blockinfile:
-    path: /etc/security/faillock.conf
-    block: |
-      deny = 3
-      even_deny_root
-      dir = /var/log/faillock
-      fail_interval = 900
-      unlock_time = 0
-
 - name: add_ctrl_alt_delete_action
   ansible.builtin.blockinfile:
     path: /etc/systemd/system.conf
     block: |
       CtrlAltDelBurstAction=none
-
-- name: add_journald_options
-  ansible.builtin.blockinfile:
-    path: /etc/systemd/journald.conf
-    block: |
-      Compress=yes
-      Storage=persistent
 
 - name: symlink_ctrl_alt_delete
   ansible.builtin.file:
@@ -127,11 +121,17 @@
     regexp: 'INACTIVE=-1'
     replace: 'INACTIVE=35'
 
-- name: update_coredump
+- name: update_coredump_storage
   ansible.builtin.replace:
     path: /etc/systemd/coredump.conf
     regexp: '#Storage=external'
     replace: 'Storage=none'
+
+- name: update_coredump_processsizemax
+  ansible.builtin.replace:
+    path: /etc/systemd/coredump.conf
+    regexp: 'ProcessSizeMax=1G'
+    replace: 'ProcessSizeMax=0'
 
 - name: update_pass_min
   ansible.builtin.lineinfile:

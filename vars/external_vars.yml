@@ -5,6 +5,8 @@ users:
     uid: 99500
     full_name: 'Local Admin User'
     shell: /bin/bash
+    password_expire_max: 365
+    password_expire_min: 1
     password: $6$5w5VsQXeYKvys$mSXH.yNSBNfADytXat38WUFm2k1jmOZpF36ufnNAvXKSAK5sKu4l74dda0rV4EmwAEkYf3rUDZA6/Dn63zZro/ 
     home: /var/local/locala
   foobar:
@@ -12,6 +14,8 @@ users:
     uid: 99501
     full_name: 'Foo Bar'
     shell: /bin/bash
+    password_expire_max: 365
+    password_expire_min: 1
     password: $6$zfbPDu5euUyd$C/bQcQhomwaoJ.XyDgyET8PuyoYmalY0LsThg.Sp6FXxPo98fZSKq0odUXqo6ilQdEDVZ1lYQAPaSdyjrasrV/
     home: /var/local/foobar
 
