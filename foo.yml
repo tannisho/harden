@@ -3,8 +3,7 @@
   vars_files:
     - ~/harden/vars/external_vars.yml
   roles:  
-    - authselect
-    - misc
+    - modprobe
 
   handlers:
     - name: restart_sshd
